@@ -1,8 +1,9 @@
 package matcher.game.silveira.avila.com.tasker.db
 
-class Task(name : String, day : String, time : String) {
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-    val name : String = name
-    val day : String = day
-    val time : String = time
+@Entity
+class Task(@PrimaryKey val id : Int, val name: String, val day: String, val time: String) {
+
 }

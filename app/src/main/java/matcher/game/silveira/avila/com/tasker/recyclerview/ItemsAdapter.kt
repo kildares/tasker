@@ -24,6 +24,9 @@ class ItemsAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<ItemsAdap
     }
 
     override fun getItemCount(): Int {
+        if(dataList == null){
+            return 0;
+        }
         return dataList.size
     }
 

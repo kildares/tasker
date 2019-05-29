@@ -4,21 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import matcher.game.silveira.avila.com.tasker.db.Task
+import matcher.game.silveira.avila.com.tasker.repository.TaskRepository
+import javax.inject.Inject
 
 
-class ItemsViewModel : ViewModel() {
+class ItemsViewModel @Inject constructor(private val taskRepository: TaskRepository) : ViewModel() {
 
-    private val liveData = MutableLiveData<List<Task>>()
-    val data: LiveData<List<Task>> get() = liveData
-
-    init {
-        val tempData = ArrayList<Task>()
-
-        val first = Task("Person", "111", "2324")
-
-        tempData.add(first)
-
-        liveData.value = tempData
-    }
+    val liveData : LiveData<List<Task>> = taskRepository.getTaskLiveDataList()
 
 }

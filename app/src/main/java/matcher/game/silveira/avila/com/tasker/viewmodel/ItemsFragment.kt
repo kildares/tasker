@@ -2,8 +2,6 @@ package matcher.game.silveira.avila.com.tasker.viewmodel
 
 
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 
 import matcher.game.silveira.avila.com.tasker.R
+import matcher.game.silveira.avila.com.tasker.dependencyinjection.Injectable
+import matcher.game.silveira.avila.com.tasker.dependencyinjection.TaskViewModelFactory
 import matcher.game.silveira.avila.com.tasker.recyclerview.ItemsAdapter
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
@@ -20,11 +21,12 @@ import matcher.game.silveira.avila.com.tasker.recyclerview.ItemsAdapter
  * create an instance of this fragment.
  *
  */
-class ItemsFragment : Fragment() {
+class ItemsFragment constructor() : Fragment(), Injectable {
 
     private lateinit var viewModel : ItemsViewModel
     private lateinit var recyclerView : androidx.recyclerview.widget.RecyclerView
     private lateinit var itemAdapter : ItemsAdapter
+    @Inject lateinit var viewModelFactory : TaskViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,13 +47,13 @@ class ItemsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        viewModel = ViewModelProviders.of(this, this.viewModelFactory).get(ItemsViewModel::class.java)
+
         setupList()
 
-        viewModel = ViewModelProviders.of(this).get(ItemsViewModel::class.java)
+        viewModel.liveData.observe(this, Observer { data ->
 
-        viewModel.data.observe(this, Observer { data ->
-
-            if(viewModel.data != null){
+            if(data != null && data.isNotEmpty()){
                 itemAdapter.setData(data)
             }
         })
